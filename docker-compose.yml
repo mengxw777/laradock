@@ -51,6 +51,8 @@ volumes:
     driver: ${VOLUMES_DRIVER}
   dind:
     driver: ${VOLUMES_DRIVER}
+  influx:
+    driver: ${VOLUMES_DRIVER}
 
 services:
 
@@ -1664,3 +1666,17 @@ services:
         - ${DATA_PATH_HOST}/tomcat/logs:/usr/local/tomcat/logs
       # restart: always
 
+### Influx DB Container #######################################
+
+influx:
+  build: "./influxdb"
+  environment:
+      INFLUXDB_REPORTING_DISABLED: "true"
+      INFLUXDB_META_LOGGING_ENABLED: "false"
+      INFLUXDB_DATA_QUERY_LOG_ENABLED: "false"
+      INFLUXDB_ADMIN_ENABLED: "true"
+  volumes:
+      - influx:/var/lib/influxdb
+  ports:
+      - "8083:8083"
+      - "8086:8086"
